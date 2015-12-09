@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html style="  background-color: darkcyan;">
+  <head>
+    <title>jQuery Boilerplate</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    
+  </head>
+  <body>
+    <textarea id="textareaID" style="margin: 0px; height: 800px; width: 50%;margin: auto;display: block;padding: 20px;border-radius: 28px;font-size: 29px;"></textarea>
+    <script>
+       var ws = new WebSocket("ws://" + window.location.hostname + ":3002");
+
+       ws.onmessage = function (evt) 
+       { 
+          $('#textareaID').val(evt.data)
+       };
+      $('#textareaID').bind('input propertychange', function() {
+        ws.send(this.value);
+        console.log(this.value);
+      });
+    </script>
+  </body>
+</html>
