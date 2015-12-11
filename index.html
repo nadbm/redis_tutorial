@@ -3,24 +3,57 @@
   <head>
     <title>Time Series</title>
    <script src="https://cdnjs.cloudflare.com/ajax/libs/smoothie/1.27.0/smoothie.min.js"></script>
-    
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
   </head>
-  <body onload="createTimeline()">
-    <canvas id="chart" width="800" height="100"></canvas>
+  <style>
+     p,h1,h2 {
+      font-family: 'Montserrat', sans-serif;
+      color:white;
+      font-weight: 100
+     }
+  </style>
+  <body>
+    <h1>Channels</h1>
+    <h2>timeseries:green</h2>
+    <canvas id="green" width="800" height="100"></canvas>
+    <h2>timeseries:red</h2>
+    <canvas id="red" width="800" height="100"></canvas>
+    <h2>timeseries:blue</h2>
+    <canvas id="blue" width="800" height="100"></canvas>
+    <h2>timeseries:orange</h2>
+    <canvas id="orange" width="800" height="100"></canvas>
     <script>
-       
+      (function () {
+        "use strict";
+        var timeseries = {
+          'green' : new TimeSeries(),
+          'red' : new TimeSeries(),
+          'blue' : new TimeSeries(),
+          'orange': new TimeSeries(),
+        };
 
-      var timeseries = new TimeSeries();
-      function createTimeline() {
-        var chart = new SmoothieChart();
-        chart.addTimeSeries(timeseries, { strokeStyle: 'rgba(0, 255, 0, 1)', fillStyle: 'rgba(0, 255, 0, 0.2)', lineWidth: 4 });
-        chart.streamTo(document.getElementById("chart"), 500);
-      };
-      var ws = new WebSocket("ws://" + window.location.hostname + ":3002");
-      ws.onmessage = function (evt) 
-       { 
-          timeseries.append(new Date().getTime(),parseFloat(evt.data))
-       };
+
+        function createTimeline(id, stroke, fill) {
+          var chart = new SmoothieChart();
+          chart.addTimeSeries(timeseries[id], { strokeStyle: stroke, fillStyle: fill, lineWidth: 2 });
+          chart.streamTo(document.getElementById(id), 500);
+        };
+        var ws = new WebSocket("ws://" + window.location.hostname + ":3002");
+        ws.onmessage = function (evt) 
+        { 
+            var id = evt.data.split(':')[0]
+            var data = evt.data.split(':')[1]
+            timeseries[id].append(new Date().getTime(),parseFloat(data))
+        };
+
+
+
+        createTimeline('green','rgba(0, 255, 0, 1)', 'rgba(0, 255, 0, 0.2)');
+        createTimeline('red','rgba(255, 0, 0, 1)', 'rgba(255, 0,  0, 0.2)');
+        createTimeline('blue','rgba(0, 0, 255, 1)', 'rgba(0, 0, 255, 0.2)');
+        createTimeline('orange','rgba(255, 127, 14, 1)', 'rgba(255,127,14, 0.2)');
+      })();
+      
     </script>
   </body>
 </html>
