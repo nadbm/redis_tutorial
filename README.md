@@ -1,8 +1,14 @@
 # redis_tutorial
 A simple ruby app to show the pubsub features of redis
-
+#Dependencies
+Redis
+Ruby 2.2.2
 
 #Running
+Install dependencies :
+```bash
+bundle install
+```
 
 Run the webserver : 
 ```bash
