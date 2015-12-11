@@ -6,14 +6,26 @@
     <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
   </head>
   <style>
+    body {
+      width:900px;
+      margin:auto;
+    }
      p,h1,h2 {
       font-family: 'Montserrat', sans-serif;
       color:white;
       font-weight: 100
      }
+     h2 {
+        font-size: 1.2em;
+        color: teal;
+        margin-left: 20px;
+        display: inline-block;
+        margin-right: 100%;
+        padding: 7px;
+     }
   </style>
   <body>
-    <h1>Channels</h1>
+    <h1>Redis Channels</h1>
     <h2>timeseries:green</h2>
     <canvas id="green" width="800" height="100"></canvas>
     <h2>timeseries:red</h2>
