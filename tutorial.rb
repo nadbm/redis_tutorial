@@ -9,20 +9,9 @@ EM.run do
 
   redis = EM::Hiredis.connect
 
-  redis.pubsub.subscribe("timeseries-data:red") do |msg|
-    clients.each{ |client| client.send("red:"+ msg)}
-  end
-
-  redis.pubsub.subscribe("timeseries-data:green") do |msg|
-    clients.each{ |client| client.send("green:"+ msg)}
-  end
-
-  redis.pubsub.subscribe("timeseries-data:blue") do |msg|
-    clients.each{ |client| client.send("blue:"+ msg)}
-  end
-  
-  redis.pubsub.subscribe("timeseries-data:orange") do |msg|
-    clients.each{ |client| client.send("orange:"+ msg)}
+  redis.pubsub.psubscribe("timeseries-data:*") do |channel, msg|
+    color = channel.split(':').last
+    clients.each{ |client| client.send("#{color}:#{msg}")}
   end
 
   EM::WebSocket.run(:host => "0.0.0.0", :port => 3002) do |ws|
